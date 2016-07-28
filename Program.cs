@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -33,42 +34,28 @@ namespace dregg
 
             if (parseResult.Succeeded)
             {
-                using (WebClient client = new WebClient())
-                {
-                    //                    var response = client.UploadString(client.BaseAddress, "{\"params\": [\"WikiStart\"], \"method\": \"wiki.getPage\", \"id\": 123}");
-                    //                   HandleHeaders(client);
-                    // var response = CallRpc(client, "wiki.getPage", "WikiStart", "123");
-                    //var response = CallRpc(client, "ticket.changeLog", "12657", "123");
-                    var response = JsonConvert.DeserializeObject(CallRpc(client, "ticket.query", 
-                        "status=closed&milestone=3.7.4&keywords=#rn|#RN&order=id", "123"));
+                Api trac = new Api();
+                NameValueCollection col = new NameValueCollection();
+                col.Add("status", "closed");
+                col.Add("milestone", "3.5");
+                col.Add("keywords", "~#rn");
+                col.Add("order", "id");
 
+                StringBuilder lines = new StringBuilder();
+                foreach(var res in trac.QueryTickets(col).Result)
+                {
+                    var changes = trac.GetChanges(res).ChangeList;
+                    var r = (from f in changes where f.Action.ToLowerInvariant()=="comment" && f.To.ToLowerInvariant().Contains("#rn") select f);
+                    foreach (var o in r)
+                        lines.AppendFormat("#{0}: {1}; {2}", res, o.Author, o.To);
                 }
+                Console.ReadLine();
+                
             }
         }
 
-        private static void HandleHeaders(WebClient client)
-        {
-            client.BaseAddress = "***REMOVED***";
-            string authInfo = "***REMOVED***";
-            authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
-            client.Headers["Authorization"] = "Basic " + authInfo;
-            client.Headers.Add("Content-Type", "application/json");
-        }
+       
 
-        private static string CallRpc(WebClient client, string method, string parameters, string id)
-        {
-            HandleHeaders(client);
-            if (String.IsNullOrEmpty(parameters))
-                return client.UploadString(client.BaseAddress,
-    string.Format(
-        "{{ \"method\":\"{1}\", \"id\":\"{2}\" }}",
-        parameters, method, id));
-
-
-            return client.UploadString(client.BaseAddress,
-                string.Format(
-                    "{{ \"params\": [\"{0}\"], \"method\":\"{1}\", \"id\":\"{2}\" }}",
-                    parameters, method, id));
-        }
+       
     }
 }

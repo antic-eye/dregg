@@ -73,6 +73,44 @@ namespace dregg
 
         }
 
+        public class Ticket
+        {
+            private TicketData data;
+            public string Id { get; set; }
+            public List<object> Result { get; set; }
+            public TicketData Data
+            {
+                get { return ParseObjects(Result); }
+            }
+            private TicketData ParseObjects(List<object> results)
+            {
+                if (null != results && null==this.data)//only on the first call
+                {
+                    
+                        TicketData d = new TicketData();
+                        //skip 0, we do not know how to handle __jsonclass__ properly                   
+                        d = JsonConvert.DeserializeObject<TicketData>(results[3].ToString());
+
+                        this.data = d;
+                    
+                }
+                return data;
+            }
+        }
+        public class TicketData
+        {
+            public string Owner { get; set; }
+            public string Reporter { get; set; }
+            public string Summary { get; set; }
+        }
+
+        public Ticket GetTicket(int ticketId)
+        {
+            string res = CallRpc("ticket.get", ticketId.ToString(), Guid.NewGuid().ToString());
+            var response = JsonConvert.DeserializeObject<Ticket>(res);
+            string s = response.Data.ToString();
+            return (Ticket)response;
+        }
         public TicketQuery QueryTickets(NameValueCollection query)
         {
             string res = CallRpc("ticket.query", Col2Query(query), Guid.NewGuid().ToString());

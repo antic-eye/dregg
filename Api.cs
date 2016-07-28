@@ -11,7 +11,7 @@ namespace dregg
 {
     public class Api
     {
-        public class Tickets
+        public class TicketQuery
         {
             public string Id { get; set; }
             public string Error { get; set; }
@@ -34,8 +34,7 @@ namespace dregg
 
             private List<Change> ParseObjects(List<List<object>> results)
             {
-                List<Change> list = new List<Change>();
-                if (null != results)
+                if (null != results && this.changeList.Count == 0)//only on the first call
                 {
                     foreach (var line in results)
                     {
@@ -47,10 +46,10 @@ namespace dregg
                         c.To = line[4].ToString();
                         c.Id = Convert.ToInt32(line[5]);
 
-                        list.Add(c);
+                        this.changeList.Add(c);
                     }
                 }
-                return list;
+                return this.changeList;
             }
         }
         public class Change
@@ -74,10 +73,10 @@ namespace dregg
 
         }
 
-        public Tickets QueryTickets(NameValueCollection query)
+        public TicketQuery QueryTickets(NameValueCollection query)
         {
             string res = CallRpc("ticket.query", Col2Query(query), Guid.NewGuid().ToString());
-            var response = JsonConvert.DeserializeObject<Tickets>(res);
+            var response = JsonConvert.DeserializeObject<TicketQuery>(res);
 
             return response;
         }

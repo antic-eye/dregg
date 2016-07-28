@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -41,16 +43,20 @@ namespace dregg
                 col.Add("keywords", "~#rn");
                 col.Add("order", "id");
 
-                StringBuilder lines = new StringBuilder();
-                foreach(var res in trac.QueryTickets(col).Result)
+                string sPath = Path.GetTempFileName().Replace(".tmp", ".csv");
+                using (TextWriter writer = File.CreateText(sPath))
                 {
-                    var changes = trac.GetChanges(res).ChangeList;
-                    var r = (from f in changes where f.Action.ToLowerInvariant()=="comment" && f.To.ToLowerInvariant().Contains("#rn") select f);
-                    foreach (var o in r)
-                        lines.AppendFormat("#{0}: {1}; {2}", res, o.Author, o.To);
+                    writer.WriteLine("\"Ticket\";\"TicketAuthor\";\"Summary\";\"Release Note Content\"");
+                    foreach (var res in trac.QueryTickets(col).Result)
+                    {
+                        var ticket = trac.GetTicket(res);
+                        var changes = trac.GetChanges(res).ChangeList;
+                        var r = (from f in changes where f.Action.ToLowerInvariant() == "comment" && f.To.ToLowerInvariant().Contains("#rn") select f);
+                        foreach (var o in r)
+                            writer.WriteLine("\"#{0}\";\"{1}\";\"{2}\";\"{3}\"", res, o.Author, ticket.Data.Summary, o.To);
+                    }
                 }
-                Console.ReadLine();
-                
+                Process.Start(sPath);
             }
         }
 

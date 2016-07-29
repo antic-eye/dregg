@@ -13,8 +13,6 @@ application.
 It is not really generic but might be useful as a base to start with C#,
 Trac and the [XMLRPC Plugin][xmlrpc] using [JSON RPC][jsonrpc] as technology.
 
-[trac]:		https://trac.edgewall.org/					"Trac Bugtracker"
-[xmlrpc]:	https://trac-hacks.org/wiki/XmlRpcPlugin	"Trac XML-RPC
-Plugin"
-[jsonrpc]:	https://en.wikipedia.org/wiki/JSON-RPC		"JSON-RPC is a remote
-procedure call protocol encoded in JSON."
+[trac]:https://trac.edgewall.org/ "Trac Bugtracker"
+[xmlrpc]:https://trac-hacks.org/wiki/XmlRpcPlugin "Trac XML-RPC Plugin"
+[jsonrpc]:https://en.wikipedia.org/wiki/JSON-RPC "JSON-RPC is a remote procedure call protocol encoded in JSON."

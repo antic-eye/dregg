@@ -193,8 +193,11 @@ namespace dregg
         private void AddHeaders(WebClient client)
         {
             client.BaseAddress = this.baseUri;
-            string authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(string.Format("{0}:{1}", this.user, this.password)));
-            client.Headers["Authorization"] = "Basic " + authInfo;
+            if (!String.IsNullOrEmpty(this.user))
+            {
+                string authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(string.Format("{0}:{1}", this.user, this.password)));
+                client.Headers["Authorization"] = "Basic " + authInfo;
+            }
             client.Headers.Add("Content-Type", "application/json");
         }
 

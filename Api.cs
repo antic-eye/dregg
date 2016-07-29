@@ -70,7 +70,8 @@ namespace dregg
                 {
                     return this.to;
                 }
-                set {
+                set
+                {
                     this.to = ParseText(value);
                 }
             }
@@ -127,15 +128,16 @@ namespace dregg
             public int Id { get; set; }
         }
         //basic data
-        private readonly string baseUri = "";
-        private readonly string user = "";
-        private readonly string password = "";
+        private readonly string baseUri = string.Empty;
+        private readonly string user = string.Empty;
+        private readonly string password = string.Empty;
 
-        //
-
-        public Api()
+        public Api() { }
+        public Api(string host, string user, string password)
         {
-
+            this.user = user;
+            this.password = password;
+            this.baseUri = host;
         }
 
         public class Ticket
@@ -149,15 +151,13 @@ namespace dregg
             }
             private TicketData ParseObjects(List<object> results)
             {
-                if (null != results && null==this.data)//only on the first call
+                if (null != results && null == this.data)//only on the first call
                 {
-                    
-                        TicketData d = new TicketData();
-                        //skip 0, we do not know how to handle __jsonclass__ properly                   
-                        d = JsonConvert.DeserializeObject<TicketData>(results[3].ToString());
+                    TicketData d = new TicketData();
+                    //skip 0, we do not know how to handle __jsonclass__ properly                   
+                    d = JsonConvert.DeserializeObject<TicketData>(results[3].ToString());
 
-                        this.data = d;
-                    
+                    this.data = d;
                 }
                 return data;
             }

@@ -40,6 +40,9 @@ namespace dregg
                 {
                     foreach (var line in results)
                     {
+                        if (!line[4].ToString().ToLowerInvariant().Contains("#rn"))
+                            continue;
+
                         Change c = new Change();
                         //skip 0, we do not know how to handle __jsonclass__ properly                   
                         c.Author = line[1].ToString();

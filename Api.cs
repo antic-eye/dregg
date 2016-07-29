@@ -128,8 +128,8 @@ namespace dregg
         }
         //basic data
         private readonly string baseUri = "***REMOVED***";
-        private readonly string user = "***REMOVED***";
-        private readonly string password = "***REMOVED***";
+        private readonly string user = "";
+        private readonly string password = "";
 
         //
 

@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace dregg
@@ -183,7 +185,6 @@ namespace dregg
             string res = CallRpc("ticket.changeLog", ticketId.ToString(), Guid.NewGuid().ToString());
             var response = JsonConvert.DeserializeObject<Changes>(res);
             response.Id = ticketId.ToString();
-            //var res2 = JsonConvert.DeserializeObject<Change>(response.Result[0].ToString());
             return response;
         }
         private void AddHeaders(WebClient client)

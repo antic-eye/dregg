@@ -36,6 +36,7 @@ namespace dregg
                //    .HavingLongAlias("key-file")
                //    .DescribedBy("Key File", "string that indicates the file to get the product version from (will be KEYFILE identifier in the output)")
                .BuildConfiguration();
+            var usage = new UsageComposer(configuration).Compose();
             var parser = new CommandLineParser(configuration);
             var parseResult = parser.Parse(args);
 
@@ -63,10 +64,13 @@ namespace dregg
                 }
                 Process.Start(sPath);
             }
+            else
+            {
+                Console.Error.WriteLine(parseResult.Message);
+                Console.Error.WriteLine("usage:" + usage.Arguments);
+                Console.Error.WriteLine("options");
+                Console.Error.WriteLine(usage.Options.IndentBy(4));
+            }
         }
-
-       
-
-       
     }
 }

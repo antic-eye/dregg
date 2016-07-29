@@ -127,7 +127,7 @@ namespace dregg
             public int Id { get; set; }
         }
         //basic data
-        private readonly string baseUri = "***REMOVED***";
+        private readonly string baseUri = "";
         private readonly string user = "";
         private readonly string password = "";
 

@@ -54,11 +54,71 @@ namespace dregg
         }
         public class Change
         {
+            private string to = string.Empty;
             public DateTime Timestamp { get; set; }
             public string Author { get; set; }
             public string Action { get; set; }
             public string From { get; set; }
-            public string To { get; set; }
+            public string To
+            {
+                get
+                {
+                    return this.to;
+                }
+                set {
+                    this.to = ParseText(value);
+                }
+            }
+
+            private string ParseText(string value)
+            {
+                StringBuilder dbText = new StringBuilder();
+                bool bIsChangeset = false;
+                //Check if changeset or comment
+                if (value.ToLowerInvariant().StartsWith("in [changeset:"))
+                    bIsChangeset = true;
+
+                using (TextReader reader = new StringReader(value))
+                {
+                    string line = string.Empty;
+                    bool bContent = false;
+                    bool bRN = false;
+                    while (null != (line = reader.ReadLine()))
+                    {
+                        string lineLowered = line.ToLowerInvariant();
+                        if (bIsChangeset && lineLowered.StartsWith("}}}"))
+                            bContent = false;
+                        if (bContent && bIsChangeset || !bIsChangeset)
+                        {
+                            if (lineLowered.Contains("#rn"))
+                                bRN = true;
+                            if (lineLowered.StartsWith("#!committicketreference") || !bRN)
+                                continue;
+
+                            int iRNPos = -1;
+                            iRNPos = lineLowered.IndexOf("#rn");
+                            if (iRNPos > -1)
+                                line = line.Substring(iRNPos);
+
+                            dbText.Append(line).Append(" ");
+                        }
+                        if (bIsChangeset && lineLowered.StartsWith("{{{"))
+                            bContent = true;
+                    }
+                }
+                dbText =
+                    dbText.Replace("#rn", string.Empty)
+                    .Replace("#RN", string.Empty)
+                    .Replace("#Rn", string.Empty)
+                    .Replace("#rN", string.Empty)
+                    .Replace("\"", "\"\"");
+
+                string sRet = dbText.ToString();
+                if (sRet.StartsWith(":"))
+                    sRet = sRet.Substring(1);
+                return sRet;
+            }
+
             public int Id { get; set; }
         }
         //basic data

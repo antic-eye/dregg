@@ -16,25 +16,28 @@ namespace dregg
     {
         static void Main(string[] args)
         {
+            string user = string.Empty;
+            string password = string.Empty;
+            string host = string.Empty;
             string milestone = string.Empty;
             Boolean bClosedOnly = false;
             var configuration = CommandLineParserConfigurator
                .Create()
+                   .WithNamed("u", m => user = m)
+                       .HavingLongAlias("username")
+                       .DescribedBy("Username", "The user name of a user with permission TRAC_XMLRPC. If empty anonymous login is used.")
+                   .WithNamed("p", m => password = m)
+                       .HavingLongAlias("password")
+                       .DescribedBy("Password", "Password of the user given via -u or --username.")
+                   .WithNamed("h", m => host = m).Required()
+                       .HavingLongAlias("host")
+                       .DescribedBy("Host", "XMLRPC url of the trac system; basically https://myhost.mydomain/trac/project1/jsonrpc for anonymous access or https://myhost.mydomain/trac/project1/login/jsonrpc for use with the credentials.")
                    .WithNamed("m", m => milestone = m).Required()
                        .HavingLongAlias("milestone")
-                       .DescribedBy("Milestone", "specifies the milestone (i.e. 3.7.4) to get all entries for 3.7.4")
+                       .DescribedBy("Milestone", "specifies the milestone (i.e. 1.2.3) to get all entries for 1.2.3")
                     .WithSwitch("c", () => bClosedOnly=true)
                     .HavingLongAlias("closed-only")
                     .DescribedBy("Query only closed tickets")
-               //.WithNamed("t", w => tgt = new FileInfo(w)).Required()
-               //    .HavingLongAlias("target-file")
-               //    .DescribedBy("Target File", "specifies the path to the wxs file to be written")
-               //.WithNamed("i", i => installFolder = i)
-               //    .HavingLongAlias("install-folder")
-               //    .DescribedBy("INSTALLFOLDER", "name of the variable that indicates the root folder on the target system of the user. Default is INSTALLFOLDER")
-               //.WithNamed("k", k => keyFile = k)
-               //    .HavingLongAlias("key-file")
-               //    .DescribedBy("Key File", "string that indicates the file to get the product version from (will be KEYFILE identifier in the output)")
                .BuildConfiguration();
             var usage = new UsageComposer(configuration).Compose();
             var parser = new CommandLineParser(configuration);
@@ -42,7 +45,7 @@ namespace dregg
 
             if (parseResult.Succeeded)
             {
-                Api trac = new Api();
+                Api trac = new Api(host, user, password);
                 NameValueCollection col = new NameValueCollection();
                 if (bClosedOnly)
                     col.Add("status", "closed");

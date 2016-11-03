@@ -167,6 +167,7 @@ namespace dregg
             public string Owner { get; set; }
             public string Reporter { get; set; }
             public string Summary { get; set; }
+            public string Source { get; set; }
         }
 
         public Ticket GetTicket(int ticketId)
@@ -207,18 +208,16 @@ namespace dregg
             using (WebClient client = new WebClient())
             {
                 AddHeaders(client);
+                string sReq = string.Format(
+                        "{{ \"params\": [\"{0}\"], \"method\":\"{1}\", \"id\":\"{2}\" }}",
+                        parameters, method, id);
                 if (String.IsNullOrEmpty(parameters))
                 {
-                    sRet = client.UploadString(client.BaseAddress, string.Format(
+                    sReq = string.Format(
                         "{{ \"method\":\"{1}\", \"id\":\"{2}\" }}",
-                        parameters, method, id));
+                        parameters, method, id);
                 }
-                else
-                {
-                    sRet = client.UploadString(client.BaseAddress, string.Format(
-                        "{{ \"params\": [\"{0}\"], \"method\":\"{1}\", \"id\":\"{2}\" }}",
-                        parameters, method, id));
-                }
+                sRet = client.UploadString(client.BaseAddress, sReq);
             }
             return sRet;
         }

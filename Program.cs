@@ -59,20 +59,29 @@ namespace dregg
                 using (TextWriter writer = new StreamWriter(sPath, false, Encoding.Default))
                 {
                     writer.WriteLine("\"Ticket\";\"TicketAuthor\";\"Summary\";\"Release Note Content\";\"Source\"");
-                    foreach (var res in trac.QueryTickets(col).Result)
+                    for (int i = 1; i < 1000; i++)
                     {
-                        var ticket = trac.GetTicket(res);
-                        var changes = trac.GetChanges(res).ChangeList;
-                        var r = (from f in changes where f.Action.ToLowerInvariant() == "comment" select f).Distinct();
-                        List<int> lHashs = new List<int>();
-                        foreach (var o in r)
+                        var query = trac.QueryTickets(col, i);
+
+                        if (null == query || null == query.Result || query.Result.Length==0)
+                            break;
+
+                        Trace.WriteLine("Processing page " + i);
+                        foreach (var res in query.Result)
                         {
-                            if (lHashs.Contains(ticket.Data.Summary.GetHashCode()))
-                                continue;
-                            else
-                                lHashs.Add(ticket.Data.Summary.GetHashCode());
-                            writer.WriteLine("\"=HYPERLINK(\"\"{0}/ticket/{1}\"\"; \"\"#{1}\"\")\";\"{2}\";\"{3}\";\"{4}\";\"{5}\"",
-                                server, res, o.Author, ticket.Data.Summary, o.To, ticket.Data.Source);
+                            var ticket = trac.GetTicket(res);
+                            var changes = trac.GetChanges(res).ChangeList;
+                            var r = (from f in changes where f.Action.ToLowerInvariant() == "comment" select f).Distinct();
+                            List<int> lHashs = new List<int>();
+                            foreach (var o in r)
+                            {
+                                if (lHashs.Contains(ticket.Data.Summary.GetHashCode()))
+                                    continue;
+                                else
+                                    lHashs.Add(ticket.Data.Summary.GetHashCode());
+                                writer.WriteLine("\"=HYPERLINK(\"\"{0}/ticket/{1}\"\"; \"\"#{1}\"\")\";\"{2}\";\"{3}\";\"{4}\";\"{5}\"",
+                                    server, res, o.Author, ticket.Data.Summary, o.To, ticket.Data.Source);
+                            }
                         }
                     }
                 }

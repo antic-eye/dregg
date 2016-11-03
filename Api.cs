@@ -40,15 +40,27 @@ namespace dregg
                 {
                     foreach (var line in results)
                     {
-                        if (!line[4].ToString().ToLowerInvariant().Contains("#rn"))
+                        int iPos = -1;
+                        int i = 0;
+                        foreach (var s in line)
+                        {
+                            if (s.ToString().ToLowerInvariant().Contains("#rn"))
+                            {
+                                iPos = i;
+                            }
+                            i++;
+                        }
+                        if (iPos == -1)
                             continue;
+
+                        string text = line[iPos].ToString();
 
                         Change c = new Change();
                         //skip 0, we do not know how to handle __jsonclass__ properly                   
                         c.Author = line[1].ToString();
                         c.Action = line[2].ToString();
                         c.From = line[3].ToString();
-                        c.To = line[4].ToString();
+                        c.To = line[iPos].ToString();
                         c.Id = Convert.ToInt32(line[5]);
 
                         this.changeList.Add(c);
@@ -177,12 +189,17 @@ namespace dregg
             string s = response.Data.ToString();
             return (Ticket)response;
         }
-        public TicketQuery QueryTickets(NameValueCollection query)
+        public TicketQuery QueryTickets(NameValueCollection query, int page)
         {
-            string res = CallRpc("ticket.query", Col2Query(query), Guid.NewGuid().ToString());
-            var response = JsonConvert.DeserializeObject<TicketQuery>(res);
-
-            return response;
+            string res = CallRpc("ticket.query", Col2Query(query, page), Guid.NewGuid().ToString());
+            try
+            {
+                return JsonConvert.DeserializeObject<TicketQuery>(res);
+            }
+            catch (JsonReaderException)
+            {
+                return null;
+            }
         }
         public Changes GetChanges(int ticketId)
         {
@@ -222,7 +239,7 @@ namespace dregg
             return sRet;
         }
 
-        private string Col2Query(NameValueCollection col)
+        private string Col2Query(NameValueCollection col, int page)
         {
             StringBuilder sbQuery = new StringBuilder();
             foreach (string val in col)
@@ -230,6 +247,7 @@ namespace dregg
                 sbQuery.AppendFormat("{0}={1}&", val, col[val]);
             }
             sbQuery.Remove(sbQuery.Length - 1, 1);
+            sbQuery.Append("&max=100").Append("&page=").Append(page);
             return sbQuery.ToString();
         }
     }

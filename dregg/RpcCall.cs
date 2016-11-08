@@ -42,12 +42,16 @@ namespace dregg
             using (TextWriter writer = new StreamWriter(sPath, false, Encoding.Default))
             {
                 writer.WriteLine(this.csvFormat);
+                string footPrint = string.Empty;
                 for (int i = 1; i < 1000; i++)
                 {
                     var query = trac.QueryTickets(col, i);
-
                     if (null == query || null == query.Result || query.Result.Length == 0)
                         break;
+                    if (footPrint == string.Join("", query.Result))
+                        break;
+                    else
+                        footPrint = string.Join("", query.Result);
 
                     Trace.WriteLine("Processing page " + i);
                     foreach (var res in query.Result)

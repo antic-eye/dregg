@@ -181,7 +181,34 @@ namespace dregg
             public string Summary { get; set; }
             public string Source { get; set; }
         }
+        public string GetApiVersion()
+        {
+            var res = CallRpc("system.getAPIVersion", "", "");
+            var response = JsonConvert.DeserializeObject<Ticket>(res);
 
+            if (null == response || null == response.Result)
+                throw new NullReferenceException("Empty reponse.");
+            else
+            {
+                var ret = response.Result;
+                return String.Join(".", ret);
+            }
+        }
+        public class Milestone
+        {
+            public string Id { get; set;}
+            public string[] Result { get; set; }
+        }
+        public object GetMilestones()
+        {
+            var res = CallRpc("ticket.milestone.getAll", "", "");
+            var response = JsonConvert.DeserializeObject<Milestone>(res);
+
+            if (null == response.Result)
+                throw new NullReferenceException("Empty reponse.");
+            else
+                return response.Result;
+        }
         public Ticket GetTicket(int ticketId)
         {
             string res = CallRpc("ticket.get", ticketId.ToString(), Guid.NewGuid().ToString());
@@ -196,8 +223,11 @@ namespace dregg
             {
                 return JsonConvert.DeserializeObject<TicketQuery>(res);
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException ex)
             {
+                TicketQuery q = new TicketQuery();
+                q.Error = ex.Message + Environment.NewLine + JsonConvert.DeserializeObject(res);
+                
                 return null;
             }
         }
@@ -221,6 +251,9 @@ namespace dregg
 
         private string CallRpc(string method, string parameters, string id)
         {
+            if (string.IsNullOrEmpty(this.baseUri))
+                throw new ArgumentNullException("Server URI");
+
             string sRet = string.Empty;
             using (WebClient client = new WebClient())
             {

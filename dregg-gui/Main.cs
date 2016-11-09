@@ -18,7 +18,10 @@ namespace dregg_gui
         {
             InitializeComponent();
 
-
+            txt.Rtf = @"{\rtf1\ansi \b SimulationX Release Note Generator\b0 \par\par
+Use this tool to read all comments and commits from Trac that contain the string \i ""#RN""\i0  and indicate a release note entry.\par
+""Get Milestones""\i0 reads all possible milestones from Trac and populates the list.Select the milestone(s) you want the release notes to be created for and click \i ""Generate CSV""\i0.It might take a while to collect your entries.When the program is ready, it will open a csv file with your default csv app(mostly excel).\par
+}";
         }
 
         private void btnCheckServer_Click(object sender, EventArgs e)

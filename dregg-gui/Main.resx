@@ -117,4 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="txt.Text" xml:space="preserve">
+    <value>{\rtf1\ansi \b SimulationX Release Note Generator\b0
+
+Use this tool to read all comments and commits from Trac that contain the string "#RN" and indicate a release note entry.
+
+"Get Milestones" reads all possible milestones from Trac and populates the list. Select the milestone(s) you want the release notes to be created for and click "Generate CSV". It might take a while to collect your entries. When the program is ready, it will open a csv file with your default csv app (mostly excel).}</value>
+  </data>
 </root>

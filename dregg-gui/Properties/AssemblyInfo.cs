@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("dregg-gui")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Release Note Generator for Trac")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("ESI ITI GmbH")]
 [assembly: AssemblyProduct("dregg-gui")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]

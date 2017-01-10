@@ -216,9 +216,10 @@ namespace dregg
             string s = response.Data.ToString();
             return (Ticket)response;
         }
-        public TicketQuery QueryTickets(NameValueCollection query, int page)
+        public TicketQuery QueryTickets(NameValueCollection query, int page=-1)
         {
             string res = CallRpc("ticket.query", Col2Query(query, page), Guid.NewGuid().ToString());
+
             try
             {
                 return JsonConvert.DeserializeObject<TicketQuery>(res);
@@ -280,7 +281,11 @@ namespace dregg
                 sbQuery.AppendFormat("{0}={1}&", val, col[val]);
             }
             sbQuery.Remove(sbQuery.Length - 1, 1);
-            sbQuery.Append("&max=100").Append("&page=").Append(page);
+            if (page >= 0)
+            {
+                sbQuery.Append("&max=100");
+                sbQuery.Append("&page=").Append(page);
+            }
             return sbQuery.ToString();
         }
     }

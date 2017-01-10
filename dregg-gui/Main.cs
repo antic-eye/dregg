@@ -48,20 +48,43 @@ Use this tool to read all comments and commits from Trac that contain the string
 
         private void btnGo_Click(object sender, EventArgs e)
         {
+            switch (tabsOptions.SelectedTab.Name)
+            {
+                case "tabHotfix":
+                    break;
+                case "tabRelease":
+                    this.Enabled = false;
+                    RpcCall call = new RpcCall();
+                    call.closedOnly = true;
+                    call.host = txtServer.Text;
+                    call.user = txtUser.Text;
+                    call.password = txtPassword.Text;
+
+                    if (lbMilestones.Items.Count > 0)
+                    {
+                        foreach (var item in lbMilestones.SelectedItems)
+                            call.milestone += item + "|";
+                        call.milestone.Substring(0, call.milestone.Length - 1);
+                    }
+                    call.DoCall();
+                    this.Enabled = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void btnQueryTickets_Click(object sender, EventArgs e)
+        {
             this.Enabled = false;
             RpcCall call = new RpcCall();
             call.closedOnly = true;
             call.host = txtServer.Text;
             call.user = txtUser.Text;
             call.password = txtPassword.Text;
+            call.tag = string.Format("HF{0}", numRevision.Value);
 
-            if (lbMilestones.Items.Count > 0)
-            {
-                foreach (var item in lbMilestones.SelectedItems)
-                    call.milestone += item + "|";
-                call.milestone.Substring(0, call.milestone.Length - 1);
-            }
-            call.DoCall();
+            var l = call.GetTickets();
             this.Enabled = true;
         }
     }

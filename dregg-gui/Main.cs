@@ -66,8 +66,16 @@ Use this tool to read all comments and commits from Trac that contain the string
                             call.milestone += item + "|";
                         call.milestone.Substring(0, call.milestone.Length - 1);
                     }
-                    call.DoCall();
                     this.Enabled = true;
+                    switch (cbOutput.Text.ToUpperInvariant())
+                    {
+                        case "CSV":
+                            call.DoCall(true, false);
+                            break;
+                        case "HTML":
+                            call.DoCall(false, true);
+                            break;
+                    }
                     break;
                 default:
                     break;
@@ -86,6 +94,11 @@ Use this tool to read all comments and commits from Trac that contain the string
 
             var l = call.GetTickets();
             this.Enabled = true;
+        }
+
+        private void cbOutput_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnGo.Enabled = true;
         }
     }
 }

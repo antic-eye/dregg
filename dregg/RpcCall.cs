@@ -26,7 +26,7 @@ namespace dregg
             return lTickets;
 
         }
-        public void DoCall(bool GenerateCsv=true)
+        public void DoCall(bool GenerateCsv=true, bool GenerateHtml=false)
         {
             if (string.IsNullOrEmpty(host))
                 throw new ArgumentException("\"host\" is empty! Set the property to a valid host name.");
@@ -48,6 +48,43 @@ namespace dregg
                 col.Add("tags", tag);
             col.Add("order", "id");
 
+            if (GenerateHtml)
+            {
+                var rn = new ReleaseNotes();
+                rn.Version = Version.Parse(milestone.Replace("|",""));
+
+                string footPrint = string.Empty;
+                for (int i = 1; i < 1000; i++)
+                {
+                    var query = trac.QueryTickets(col, i);
+                    if (null == query || null == query.Result || query.Result.Length == 0)
+                        break;
+                    if (footPrint == string.Join("", query.Result))
+                        break;
+                    else
+                        footPrint = string.Join("", query.Result);
+
+                    Trace.WriteLine("Processing page " + i);
+                    foreach (var res in query.Result)
+                    {
+                        var ticket = trac.GetTicket(res);
+                        var changes = trac.GetChanges(res).ChangeList;
+                        var r = (from f in changes where f.Action.ToLowerInvariant() == "comment" select f).Distinct();
+                        List<int> lHashs = new List<int>();
+                        foreach (var o in r)
+                        {
+                            if (lHashs.Contains(ticket.Data.Summary.GetHashCode()))
+                                continue;
+                            else
+                                lHashs.Add(ticket.Data.Summary.GetHashCode());
+
+                            rn.Entries.Add(ticket);
+                            //writer.WriteLine(this.outputFormat, server, res, o.Author, ticket.Data.Summary, o.To, ticket.Data.Source);
+                        }
+                    }
+                }
+                rn.ToHTML(@"C:\temp\test.html");
+            }
             if (GenerateCsv)
             {
                 string sPath = Path.GetTempFileName().Replace(".tmp", ".csv");

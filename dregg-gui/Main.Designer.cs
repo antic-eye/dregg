@@ -43,11 +43,12 @@
             this.tabsOptions = new System.Windows.Forms.TabControl();
             this.tabRelease = new System.Windows.Forms.TabPage();
             this.tabHotfix = new System.Windows.Forms.TabPage();
-            this.label5 = new System.Windows.Forms.Label();
-            this.numRevision = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.btnQueryTickets = new System.Windows.Forms.Button();
             this.lbTickets = new System.Windows.Forms.ListBox();
+            this.btnQueryTickets = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numRevision = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbOutput = new System.Windows.Forms.ComboBox();
             this.tabsOptions.SuspendLayout();
             this.tabRelease.SuspendLayout();
             this.tabHotfix.SuspendLayout();
@@ -89,11 +90,12 @@
             // btnGo
             // 
             this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGo.Location = new System.Drawing.Point(374, 360);
+            this.btnGo.Enabled = false;
+            this.btnGo.Location = new System.Drawing.Point(440, 421);
             this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(210, 88);
+            this.btnGo.Size = new System.Drawing.Size(144, 27);
             this.btnGo.TabIndex = 6;
-            this.btnGo.Text = "Generate CSV";
+            this.btnGo.Text = "Generate ...";
             this.btnGo.UseVisualStyleBackColor = true;
             this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
             // 
@@ -230,14 +232,36 @@
             this.tabHotfix.Text = "New Hotfix";
             this.tabHotfix.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // lbTickets
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 63);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 13);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Revision number:";
+            this.lbTickets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbTickets.FormattingEnabled = true;
+            this.lbTickets.Location = new System.Drawing.Point(6, 91);
+            this.lbTickets.Name = "lbTickets";
+            this.lbTickets.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lbTickets.Size = new System.Drawing.Size(263, 225);
+            this.lbTickets.TabIndex = 15;
+            // 
+            // btnQueryTickets
+            // 
+            this.btnQueryTickets.Location = new System.Drawing.Point(225, 58);
+            this.btnQueryTickets.Name = "btnQueryTickets";
+            this.btnQueryTickets.Size = new System.Drawing.Size(43, 23);
+            this.btnQueryTickets.TabIndex = 3;
+            this.btnQueryTickets.Text = "???";
+            this.btnQueryTickets.UseVisualStyleBackColor = true;
+            this.btnQueryTickets.Click += new System.EventHandler(this.btnQueryTickets_Click);
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(9, 7);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(260, 53);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Enter the revision number of the Hotfix. The number will be used in the name i.e." +
+    " enter \"1234\" and the tool will search for HF1234 in the tags of tickets.";
             // 
             // numRevision
             // 
@@ -251,42 +275,33 @@
             this.numRevision.Size = new System.Drawing.Size(117, 20);
             this.numRevision.TabIndex = 1;
             // 
-            // label6
+            // label5
             // 
-            this.label6.Location = new System.Drawing.Point(9, 7);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(260, 53);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "Enter the revision number of the Hotfix. The number will be used in the name i.e." +
-    " enter \"1234\" and the tool will search for HF1234 in the tags of tickets.";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 63);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Revision number:";
             // 
-            // btnQueryTickets
+            // cbOutput
             // 
-            this.btnQueryTickets.Location = new System.Drawing.Point(225, 58);
-            this.btnQueryTickets.Name = "btnQueryTickets";
-            this.btnQueryTickets.Size = new System.Drawing.Size(43, 23);
-            this.btnQueryTickets.TabIndex = 3;
-            this.btnQueryTickets.Text = "???";
-            this.btnQueryTickets.UseVisualStyleBackColor = true;
-            this.btnQueryTickets.Click += new System.EventHandler(this.btnQueryTickets_Click);
-            // 
-            // lbTickets
-            // 
-            this.lbTickets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbTickets.FormattingEnabled = true;
-            this.lbTickets.Location = new System.Drawing.Point(6, 91);
-            this.lbTickets.Name = "lbTickets";
-            this.lbTickets.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbTickets.Size = new System.Drawing.Size(263, 225);
-            this.lbTickets.TabIndex = 15;
+            this.cbOutput.FormattingEnabled = true;
+            this.cbOutput.Items.AddRange(new object[] {
+            "CSV",
+            "HTML"});
+            this.cbOutput.Location = new System.Drawing.Point(374, 425);
+            this.cbOutput.Name = "cbOutput";
+            this.cbOutput.Size = new System.Drawing.Size(62, 21);
+            this.cbOutput.TabIndex = 17;
+            this.cbOutput.SelectedIndexChanged += new System.EventHandler(this.cbOutput_SelectedIndexChanged);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(592, 453);
+            this.Controls.Add(this.cbOutput);
             this.Controls.Add(this.tabsOptions);
             this.Controls.Add(this.txt);
             this.Controls.Add(this.txtPassword);
@@ -330,6 +345,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnQueryTickets;
         private System.Windows.Forms.ListBox lbTickets;
+        private System.Windows.Forms.ComboBox cbOutput;
     }
 }
 

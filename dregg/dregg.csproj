@@ -36,14 +36,13 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>30AF5B5A3A4E91E9A0565A6D46709208A8BB64C1</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>A2C00BB9E2B5AF404CAA3DED4FF81666A00CB447</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>tmp.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -79,6 +78,7 @@
     <None Include="packages.config" />
     <None Include="License.md" />
     <None Include="Readme.md" />
+    <None Include="tmp.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReleaseNotes.html">

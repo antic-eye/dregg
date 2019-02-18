@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>S:\develop\_Tools\dregg-RN-Generator\</PublishUrl>
+    <PublishUrl>\\esi-internal\dredfs001\Software\ClientApps\develop\_Tools\dregg-RN-Generator\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -23,10 +23,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>\\san-1.dd1.iti.local\data\ClientApps\develop\_Tools\dregg-RN-Generator\</InstallUrl>
+    <InstallUrl>\\esi-internal\dredfs001\Software\ClientApps\develop\_Tools\dregg-RN-Generator\</InstallUrl>
     <ProductName>SimulationX Tools</ProductName>
     <PublisherName>Sven Rütz</PublisherName>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>11</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -52,7 +52,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>A2C00BB9E2B5AF404CAA3DED4FF81666A00CB447</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>7B8C6B5F5EA0ED80CDF7B8EA14B2AED00B04AC49</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
